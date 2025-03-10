@@ -29,12 +29,25 @@ public class PlayerMovement : NetworkBehaviour
         if (horizontalInput < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
+                isGrounded = false;
+
+                animator.SetBool("isJumping", !isGrounded);
+            }
         }
         else if (horizontalInput > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
+            isGrounded = false;
 
+            animator.SetBool("isJumping", !isGrounded);
+        }
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
