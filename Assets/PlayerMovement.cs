@@ -6,7 +6,7 @@ public class PlayerMovement : NetworkBehaviour
 {
     float horizontalInput;
     float moveSpeed = 5f;
-
+    public float moslem;
     float jumpPower = 5f;
     bool isGrounded = false;
 
@@ -19,7 +19,7 @@ public class PlayerMovement : NetworkBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
-
+    //i love this function
     void Update()
     {
         if (!IsOwner) return;
@@ -35,11 +35,11 @@ public class PlayerMovement : NetworkBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
             isGrounded = false;
-            //add this later
+            
             animator.SetBool("isJumping", !isGrounded);
         }
     }
