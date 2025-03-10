@@ -22,14 +22,14 @@ public class PlayerMovement : NetworkBehaviour
     //i love this function
     void Update()
     {
-        if (!IsOwner) return;
+      
         horizontalInput = Input.GetAxis("Horizontal");
 
         // Flip character for animations
         if (horizontalInput < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            if (Input.GetAxis("Jump") && isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
                 isGrounded = false;
