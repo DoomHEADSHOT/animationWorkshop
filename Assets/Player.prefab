@@ -267,6 +267,8 @@ MonoBehaviour:
   currentHealth: 0
   healPoints: 1
   color: {r: 0.35479882, g: 0.7264151, b: 0.25013348, a: 1}
+  projectilePrefab: {fileID: 1756443074422926809, guid: cdb7f1b2cdb3b01439278d930240c873, type: 3}
+  fireRateDelay: 0.5
 --- !u!114 &4561425688495694447
 MonoBehaviour:
   m_ObjectHideFlags: 0
