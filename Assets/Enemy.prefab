@@ -15,12 +15,11 @@ GameObject:
   - component: {fileID: 7143552916856222240}
   - component: {fileID: 6202140295109098828}
   - component: {fileID: 375833070718906907}
-  - component: {fileID: 482334083504812684}
   - component: {fileID: 4561425688495694447}
   - component: {fileID: 3083362125017226258}
   - component: {fileID: -9081532972819850752}
   m_Layer: 3
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1312160095
+  GlobalObjectIdHash: 1180854238
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -111,7 +110,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b773760fc1c48dc4c9f1a24d0757108a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -244,29 +243,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.07239355, y: -0.6909385}
   m_Size: {x: 0.810811, y: 0.16516115}
   m_Direction: 1
---- !u!114 &482334083504812684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3603215074016683371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79f8bbcb910c0664784907ff42b4a793, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  playerName: Malek
-  Description: this the description of our NPC. The Strongest character  in the game
-  horizontalInput: 0
-  moveSpeed: 9
-  jumpPower: 5
-  isGrounded: 0
-  maxHealth: 111
-  currentHealth: 0
-  healPoints: 1
-  color: {r: 0.35479882, g: 0.7264151, b: 0.25013348, a: 1}
 --- !u!114 &4561425688495694447
 MonoBehaviour:
   m_ObjectHideFlags: 0

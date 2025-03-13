@@ -1,17 +1,47 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : NetworkBehaviour
 {
-    float horizontalInput;
-    float moveSpeed = 5f;
-    public float moslem;
-    float jumpPower = 5f;
-    bool isGrounded = false;
+    [Header("Player ID")]
+    [SerializeField] private string playerName;
+    [SerializeField]
+    [TextArea]
+    private string Description = "this the description of our NPC";
+
+    [Header("Movement Variables")]
+    [Tooltip("this is the variable that tells our code the direction of the movement")]
+    [SerializeField] float horizontalInput;
+    [SerializeField] [Delayed] float moveSpeed = 5f;
+    [SerializeField] float jumpPower = 5f;
+    [HideInInspector] public bool isGrounded = false;
+
+    [Space(20)]
+
+    [Header("Health Variables")]
+    [SerializeField] int maxHealth = 100;
+    [Range(0, 100)]
+    [SerializeField] int currentHealth;
+    [Tooltip("the default healing points in our game")]
+    [SerializeField] [Min(1)] int healPoints;
+
+    [ColorUsage(true,false)] public Color color = Color.white;
 
     Rigidbody2D rb;
     Animator animator;
+
+    [ContextMenu("resetVariablesToDefault")]
+    public void resetDefaultVariables()
+    {
+        moveSpeed = 5f;
+        jumpPower = 5f;
+        maxHealth = 100;
+        currentHealth =  80;
+        healPoints = 10;
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -57,9 +87,5 @@ public class PlayerMovement : NetworkBehaviour
     {
         isGrounded = true;
         animator.SetBool("isJumping", !isGrounded);
-    }
-    void conflict()
-    {
-        Destroy(gameObject);
     }
 }
