@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -28,7 +29,11 @@ public class PlayerMovement : NetworkBehaviour
     [Tooltip("the default healing points in our game")]
     [SerializeField] [Min(1)] int healPoints;
 
-    [ColorUsage(true,false)] public Color color = Color.white;
+    [SerializeField] private ProjectilePool projectilePool;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private float fireRateDelay = 0.5f;
+    [SerializeField] private float projectileLifeTime = 10f;
+    private float fireRateTimer = 0f;
 
     Rigidbody2D rb;
     Animator animator;
@@ -48,6 +53,14 @@ public class PlayerMovement : NetworkBehaviour
         base.OnNetworkSpawn();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        GameObject poolObject = GameObject.FindGameObjectWithTag("Pool");
+        if (poolObject != null) { 
+            projectilePool = poolObject.GetComponent<ProjectilePool>();
+        }else
+        {
+            Debug.Log("we didn't found the pool object");
+        }
     }
     //i love this function
     void Update()
@@ -73,8 +86,41 @@ public class PlayerMovement : NetworkBehaviour
             
             animator.SetBool("isJumping", !isGrounded);
         }
-    }
 
+
+        fireRateTimer += Time.deltaTime;
+        if(Input.GetAxis("Fire1") > 0  && fireRateTimer > fireRateDelay)
+        {
+            GameObject projectile = projectilePool.GetProjectile();
+
+            Vector3 projectibleSpawnPoint = transform.position + new Vector3(transform.localScale.x,0,0);
+            projectile.transform.position = projectibleSpawnPoint;
+
+            Vector2 direction = new Vector2 (transform.localScale.x,0);
+            projectile.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            projectile.GetComponent<Rigidbody2D>().AddForce(direction* 30f,ForceMode2D.Impulse);
+
+            StartCoroutine(ReturnProjectileAfterDelay(projectile,projectileLifeTime));
+        }
+
+
+
+
+        if (Input.GetAxis("Fire1") > 0) {
+            animator.SetBool("Shoot", true);
+        } else
+        {
+            animator.SetBool("Shoot", false);
+        }
+    }
+    private System.Collections.IEnumerator ReturnProjectileAfterDelay(GameObject projectile, float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (projectile.activeInHierarchy)
+        {
+            projectilePool.ReturnProjectile(projectile);
+        }
+    }
     private void FixedUpdate()
     {
         if (!IsOwner) return;
