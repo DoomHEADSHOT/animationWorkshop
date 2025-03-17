@@ -7,6 +7,8 @@ using UnityEngine.SocialPlatforms.Impl;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : NetworkBehaviour
 {
+
+    AudioClip fireSound;
     [Header("Player ID")]
     [SerializeField] private string playerName;
     [SerializeField]
@@ -92,6 +94,8 @@ public class PlayerMovement : NetworkBehaviour
         if(Input.GetAxis("Fire1") > 0  && fireRateTimer > fireRateDelay)
         {
             GameObject projectile = projectilePool.GetProjectile();
+            if (AudioManager.instance != null)
+                AudioManager.instance.PlaySFX(fireSound);
 
             Vector3 projectibleSpawnPoint = transform.position + new Vector3(transform.localScale.x,0,0);
             projectile.transform.position = projectibleSpawnPoint;
