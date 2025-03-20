@@ -1,17 +1,12 @@
 using System;
-using System.Runtime.CompilerServices;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : NetworkBehaviour
 {
     [Header("Player ID")]
     [SerializeField] private string playerName;
-    [SerializeField]
-    [TextArea]
-    private string Description = "this the description of our NPC";
 
     [Header("Movement Variables")]
     [Tooltip("this is the variable that tells our code the direction of the movement")]
@@ -21,13 +16,6 @@ public class PlayerMovement : NetworkBehaviour
     [HideInInspector] public bool isGrounded = false;
 
     [Space(20)]
-
-    [Header("Health Variables")]
-    [SerializeField] int maxHealth = 100;
-    [Range(0, 100)]
-    [SerializeField] int currentHealth;
-    [Tooltip("the default healing points in our game")]
-    [SerializeField] [Min(1)] int healPoints;
 
     [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private GameObject projectilePrefab;
@@ -43,9 +31,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         moveSpeed = 5f;
         jumpPower = 5f;
-        maxHealth = 100;
-        currentHealth =  80;
-        healPoints = 10;
+
     }
 
     public override void OnNetworkSpawn()
@@ -113,7 +99,7 @@ public class PlayerMovement : NetworkBehaviour
             animator.SetBool("Shoot", false);
         }
     }
-    private System.Collections.IEnumerator ReturnProjectileAfterDelay(GameObject projectile, float time)
+    private IEnumerator ReturnProjectileAfterDelay(GameObject projectile, float time)
     {
         yield return new WaitForSeconds(time);
         if (projectile.activeInHierarchy)
