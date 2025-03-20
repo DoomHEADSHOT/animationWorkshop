@@ -4,11 +4,24 @@ using UnityEngine.UI;
 
 public class EnhancedCoolldown : MonoBehaviour
 {
+    public static EnhancedCoolldown instance;
     [SerializeField] private float cooldownDuration = 5f;
     [SerializeField] private Image cooldownImage;
     [SerializeField] private float blinkThreshold = 3f;
     [SerializeField] private float blinkInterval = 0.2f;
     private bool isOnCooldown = false;
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

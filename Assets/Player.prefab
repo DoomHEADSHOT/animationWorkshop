@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: -9081532972819850752}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,8 +261,8 @@ MonoBehaviour:
   playerName: Malek
   Description: this the description of our NPC. The Strongest character  in the game
   horizontalInput: 0
-  moveSpeed: 9
-  jumpPower: 5
+  moveSpeed: 6
+  jumpPower: 6.5
   isGrounded: 0
   maxHealth: 111
   currentHealth: 0
