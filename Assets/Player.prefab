@@ -259,14 +259,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerName: Malek
-  Description: this the description of our NPC. The Strongest character  in the game
   horizontalInput: 0
   moveSpeed: 6
   jumpPower: 6.5
   isGrounded: 0
-  maxHealth: 111
-  currentHealth: 0
-  healPoints: 1
+  maxJumps: 1
   projectilePool: {fileID: 0}
   projectilePrefab: {fileID: 1756443074422926809, guid: cdb7f1b2cdb3b01439278d930240c873, type: 3}
   fireRateDelay: 0.5

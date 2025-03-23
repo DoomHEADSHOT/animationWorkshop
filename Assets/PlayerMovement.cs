@@ -15,6 +15,17 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] float jumpPower = 5f;
     [HideInInspector] public bool isGrounded = false;
 
+    [Header("Double Jump")]
+    [SerializeField] private int maxJumps = 1;
+    private int remainingJumps;
+
+    [Header("Dashing")]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
+    private bool canDash = true;
+    private bool isDashing = false;
+
     [Space(20)]
 
     [SerializeField] private ProjectilePool projectilePool;
@@ -22,6 +33,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private float fireRateDelay = 0.5f;
     [SerializeField] private float projectileLifeTime = 10f;
     private float fireRateTimer = 0f;
+
 
     Rigidbody2D rb;
     Animator animator;
@@ -39,6 +51,15 @@ public class PlayerMovement : NetworkBehaviour
         base.OnNetworkSpawn();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        var Camera = FindFirstObjectByType <Unity.Cinemachine.CinemachineCamera>();
+        DontDestroyOnLoad(Camera);
+        if (Camera != null) {
+            Camera.Follow = transform;
+        }else
+        {
+            print("I cannot find the camera");
+        }
 
         GameObject poolObject = GameObject.FindGameObjectWithTag("Pool");
         if (poolObject != null) { 
@@ -65,12 +86,22 @@ public class PlayerMovement : NetworkBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
         
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || remainingJumps > 0 ))
         {
+            if (!isGrounded)
+            {
+                remainingJumps--;
+            }
+
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
             isGrounded = false;
             
             animator.SetBool("isJumping", !isGrounded);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
         }
 
 
@@ -99,6 +130,24 @@ public class PlayerMovement : NetworkBehaviour
             animator.SetBool("Shoot", false);
         }
     }
+
+    private IEnumerator Dash()
+    {
+        canDash = false; // set this to false to prevent dashing spam
+        isDashing = true; // we set the dashing to true ,so we can disable the movement later
+
+        // variable used for direction ,we used Local scale X to know the direction of the player
+        Vector2 dashDirection = new Vector2(transform.localScale.x, 0);
+        rb.AddForce(dashDirection * dashSpeed ,ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(dashDuration);
+        isDashing = false;
+        rb.linearVelocity = Vector2.zero;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
+
     private IEnumerator ReturnProjectileAfterDelay(GameObject projectile, float time)
     {
         yield return new WaitForSeconds(time);
@@ -110,7 +159,10 @@ public class PlayerMovement : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!IsOwner) return;
-        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocityY);
+        if (!isDashing) // we disable this line when he is dashing to not interreupt the dash
+        {
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocityY);// we use this line for movement
+        }
         animator.SetFloat("xVelocity", Math.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", rb.linearVelocityY);
     }
@@ -119,5 +171,6 @@ public class PlayerMovement : NetworkBehaviour
     {
         isGrounded = true;
         animator.SetBool("isJumping", !isGrounded);
+        remainingJumps = maxJumps;
     }
 }
